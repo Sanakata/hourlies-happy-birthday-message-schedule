@@ -1,0 +1,27 @@
+name: Daily Birthday Post
+
+on:
+  schedule:
+    # 23:00 UTC is exactly 06:00 AM GMT+7
+    - cron: '0 23 * * *'
+  workflow_dispatch: # Allows you to test it manually anytime
+
+jobs:
+  birthday_job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install Requirements
+        run: pip install requests
+
+      - name: Execute Bot
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        run: python schedule_birthday.py
